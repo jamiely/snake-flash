@@ -8,9 +8,14 @@
 <!-- text used in the movie-->
 <OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
  codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0"
- WIDTH="250" HEIGHT="250" id="snake" ALIGN="">
- <PARAM NAME=movie VALUE="snake.swf"> <PARAM NAME=quality VALUE=high> <PARAM NAME=bgcolor VALUE=#FFFFFF> <EMBED src="snake.swf" quality=high bgcolor=#FFFFFF  WIDTH="250" HEIGHT="250" NAME="snake" ALIGN=""
+ WIDTH="800" HEIGHT="800" id="snake" ALIGN="">
+ <PARAM NAME=movie VALUE="bin/snake.swf"> <PARAM NAME=quality VALUE=high> <PARAM NAME=bgcolor VALUE=#FFFFFF> <EMBED src="bin/snake.swf" quality=high bgcolor=#FFFFFF  WIDTH="800" HEIGHT="800" NAME="snake" ALIGN=""
  TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED>
 </OBJECT>
+<script>
+  setTimeout(function() {
+    window.location.reload();
+  }, 2000);
+</script>
 </BODY>
 </HTML>

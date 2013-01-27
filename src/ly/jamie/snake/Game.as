@@ -49,15 +49,16 @@ package ly.jamie.snake {
     private var direction: Number;
     private var shouldGrow: Boolean;
 
+    public var debug: Function = function():void{};
 
     function Game(parentMC:MovieClip, boardWidth:Number, boardHeight:Number) {
-        trace("Initializing Game");
+        debug("Initializing Game");
 
         this.snake = new Array();
         this.defaultSegment = CreateSnakeSegment(parentMC, 10, 10);
         this.defaultPellet = CreatePellet(parentMC, 5, 5);
         this.defaultBarrier = CreateBarrier(parentMC, 10, 10);
-        trace("\tDefault snake segment: " + this.defaultSegment + " Default pellet: " + this.defaultPellet);
+        debug("\tDefault snake segment: " + this.defaultSegment + " Default pellet: " + this.defaultPellet);
         this.parentMC = parentMC;
 
         this.wrapAround = true;
@@ -66,7 +67,7 @@ package ly.jamie.snake {
         this.startingLength = 1;
         this.startPosition = new Point(Math.floor(boardWidth / 2), Math.floor(boardHeight / 2));
 
-        trace("\tDefault starting position: " + this.startPosition.toString());
+        debug("\tDefault starting position: " + this.startPosition.toString());
         this.startingDirection = WEST; //
         this.length = 1;
         this.boardWidth = boardWidth;
@@ -85,7 +86,7 @@ package ly.jamie.snake {
         this.board = new Array(boardWidth);
         this.mcs = new Array(boardWidth);
 
-        //trace("A: " +this.board + this.mcs);
+        //debug("A: " +this.board + this.mcs);
 
         for(var i:Number = 0; i < boardWidth; i ++) {
             this.board[i] = new Array(boardHeight);
@@ -96,11 +97,11 @@ package ly.jamie.snake {
             }
         }
 
-        trace("\tBoard Initialized");
+        debug("\tBoard Initialized");
     }
 
     public function clearPosition(x:Number, y:Number):void {
-        trace("Clearing board position " + x +  ", " + y + " val = " + this.board[x][y]);
+        debug("Clearing board position " + x +  ", " + y + " val = " + this.board[x][y]);
         this.board[x][y] = EMPTY;
         if ( this.mcs[x][y] != null ) {
             this.mcs[x][y].removeMovieClip();
@@ -109,22 +110,18 @@ package ly.jamie.snake {
     }
 
     public function addBarriers():void {
-        trace("AddBarriers");
         this.barrierCount = 0;
         this.barriers = new Array();
         var maxBarriers:Number = this.barrierFrequency * this.boardWidth * this.boardHeight;
+        var pt:Point;
 
         if ( this.barriers != null ) {
             while ( this.barriers.length > 0 ) {
-                var pt:Point = this.barriers[0];
+                pt = this.barriers[0];
                 this.clearPosition(pt.x, pt.y);
                 this.barriers.shift();
             }
         }
-
-        trace("\tBoard before:") 
-
-        this.printBoard();
 
         while(barrierCount < maxBarriers) {
             var x:Number = Math.floor(Math.random() * this.boardWidth);
@@ -140,28 +137,19 @@ package ly.jamie.snake {
         }
 
 
-        trace("\tBoard after:") 
-
-        this.printBoard();
-
-        trace("\tAdded " + barrierCount + " of " + maxBarriers + " barriers.");
-        trace("\tDuplicating barrier: " + this.barrier);
+        debug("\tAdded " + barrierCount + " of " + maxBarriers + " barriers.");
 
         for(var i:Number=0; i < this.barriers.length; i ++ ) {
             pt = this.barriers[i];
             var barrierName:String = "barrier" + i; // depth
-            this.barrier.duplicateMovieClip(barrierName, i)
-
-            var mc:MovieClip = this.parentMC[barrierName];
-
+            var mc:MovieClip = CreateBarrier(this.parentMC, this.barrier.width, this.barrier.height);
             mc.x = pt.x * this.snakeSegment.width;
             mc.y = pt.y * this.snakeSegment.height;
 
             this.mcs[pt.x][pt.y] = mc;
-
-
-            trace("\tAdding barrier " + mc + " at " + pt.toString());
         }
+
+        debug("Barrier size: Width=" + this.barrier.width + " Height=" + this.barrier.height);
     }
 
     public function printBoard():void {
@@ -169,18 +157,18 @@ package ly.jamie.snake {
         for( var i:Number = 0; i < this.board.length; i ++ ) { 
             str = str + this.board[i].join("") + "\n";
         }
-        trace(str);
+        debug(str);
     }
 
     public function removePellet():void {
-        trace("Remove Pellet");
+        debug("Remove Pellet");
         var pell:MovieClip = this.pellets[0];
 
-        trace("\tlocation: " + pell.toString());
+        debug("\tlocation: " + pell.toString());
 
         this.board[pell.x][pell.y] = EMPTY;
 
-        trace("\tmc: " + this.mcs[pell.x][pell.y]);
+        debug("\tmc: " + this.mcs[pell.x][pell.y]);
 
         this.mcs[pell.x][pell.y].removeMovieClip();
         this.mcs[pell.x][pell.y] = null;
@@ -189,17 +177,17 @@ package ly.jamie.snake {
     }
 
     public function addPellet():void {
-        trace("AddPellete");
+        debug("AddPellete");
         do {
             x = Math.floor(Math.random() * this.boardWidth);
             y = Math.floor(Math.random() * this.boardHeight);
 
-            trace("\tattempting at location: " + x + ", " + y + " board = " + this.board[x][y]);
+            debug("\tattempting at location: " + x + ", " + y + " board = " + this.board[x][y]);
         } while ( this.board[x][y] != EMPTY );
 
         var pt:Point = new Point(x, y);
 
-        trace("\tlocation: " + pt.toString());
+        debug("\tlocation: " + pt.toString());
 
         this.board[x][y] = PELLET;
 
@@ -207,14 +195,14 @@ package ly.jamie.snake {
 
 
         this.pellet.duplicateMovieClip(pelletName, 1); // depth
-        trace("\tname: " + pelletName + " mc: " + this.pellet);
+        debug("\tname: " + pelletName + " mc: " + this.pellet);
 
         this.mcs[x][y] = this.parentMC[pelletName];
 
         this.mcs[x][y].x = x * this.snakeSegment.width;
         this.mcs[x][y].y = y * this.snakeSegment.height;
 
-        trace("\tmc: " + this.mcs[x][y]);
+        debug("\tmc: " + this.mcs[x][y]);
 
         this.pellets.push(pt);
 
@@ -222,11 +210,11 @@ package ly.jamie.snake {
     }
 
     public function start():void {
-        trace("Game Start");
+        debug("Game Start");
 
 
 
-        trace("\tInitialize board to "  + EMPTY);
+        debug("\tInitialize board to "  + EMPTY);
         for(var i:Number = 0; i < this.boardWidth; i ++) {
             for(var j:Number = 0; j < this.boardHeight; j ++) {
                 this.clearPosition(i, j);
@@ -235,10 +223,10 @@ package ly.jamie.snake {
 
 
 
-        trace("\tBoard:");
-        this.printBoard();
+        // debug("\tBoard:");
+        // this.printBoard();
 
-        trace("\tBuilt board");
+        debug("\tBuilt board");
         this.length = 1;
         this.pellets = new Array();
         this.isGameOver = false;
@@ -248,7 +236,7 @@ package ly.jamie.snake {
         var firstSegment: Point = new Point(this.startPosition.x, this.startPosition.y);
         this.snake.push(firstSegment);
 
-        trace("\tFirst segment: " + firstSegment.toString());
+        debug("\tFirst segment: " + firstSegment.toString());
 
         this.snakeSegment = this.defaultSegment;
         this.pellet = this.defaultPellet;
@@ -256,6 +244,7 @@ package ly.jamie.snake {
 
         //this.depth = 100;
         this.addBarriers();
+        throw new Error("Added barriers");
  
         while ( this.snake.length > 1 ) {
           this.popSnakeSegment(); 
@@ -273,81 +262,81 @@ package ly.jamie.snake {
             lineTo(w, h);
         }
 
-        trace("\tSnake segment created.");
+        debug("\tSnake segment created.");
 
         this.isGameOver = false;
     }
 
     public function popSnakeSegment ():void { 
-        trace("Popping Snake Segment");
+        debug("Popping Snake Segment");
 
         if ( this.snake.length < 1 ) {
-            trace("\tSnake has no length");
+            debug("\tSnake has no length");
             return;
         }
 
         var end:MovieClip = this.snake[this.snake.length-1];
-        trace("\tLast segment positon: " + end.toString());
+        debug("\tLast segment positon: " + end.toString());
         if ( this.board[end.x][end.y] == SNAKE ) this.board[end.x][end.y] = EMPTY;
 
-        trace("\tRemoving clip: " + this.mcs[end.x][end.y]);
+        debug("\tRemoving clip: " + this.mcs[end.x][end.y]);
         this.mcs[end.x][end.y].removeMovieClip();
         this.mcs[end.x][end.y] = null;
 
         var len:Number = this.snake.length;
         this.snake.pop();
 
-        trace("\tSnake length before: " + len  + " afteR: " + this.snake.length);
+        debug("\tSnake length before: " + len  + " afteR: " + this.snake.length);
     }
 
     public function createSnakeSegment(x:Number, y:Number):void {
-        trace("Create Snake Segment");
+        debug("Create Snake Segment");
 
         var pt:Point = new Point(x, y);
 
-        trace("\tNew segment at point: " + pt.toString());
+        debug("\tNew segment at point: " + pt.toString());
 
         this.snake.unshift(pt);
 
 
-        trace("\tCreating snake segment at " + pt.toString());
+        debug("\tCreating snake segment at " + pt.toString());
         //segmentName = "segment" + this.depth;
         var segmentName:String = "segment";
         //this.snakeSegment.duplicateMovieClip(segmentName, this.depth);
         this.snakeSegment.duplicateMovieClip(segmentName, 0);
-        trace("\tdepth: " + this.depth);
+        //debug("\tdepth: " + this.depth);
 
         var mc:MovieClip = this.parentMC[segmentName];
 
-        trace("\tDuplicated clip: " + this.snakeSegment + " to " + mc);
+        debug("\tDuplicated clip: " + this.snakeSegment + " to " + mc);
 
         mc.x = x * mc.height; 
         mc.y = y * mc.width;
 
-        trace("\tMovieclip moved to: (" + mc.x + ", " + mc.y + ")");
+        debug("\tMovieclip moved to: (" + mc.x + ", " + mc.y + ")");
 
         this.mcs[x][y] = mc;
 
         this.board[pt.x][pt.y] = SNAKE;
 
 
-        trace("\tMovieclip " + mc + " stored at: " + this.mcs[x][y]);
+        debug("\tMovieclip " + mc + " stored at: " + this.mcs[x][y]);
 
         //this.depth ++;
     }
 
     public function step():void {
-        trace("Step");
+        debug("Step");
 
         if ( this.isGameOver ) {
             //this.step = undefined;
-            trace("\tGame Over.");
+            debug("\tGame Over.");
             return;
         }
 
         if ( !this.shouldGrow ) {
             // move from back to front
-            trace("\tDo Not grow");
+            debug("\tDo Not grow");
             this.popSnakeSegment();
         }
         else {
@@ -356,7 +345,7 @@ package ly.jamie.snake {
 
         var position: Point = this.getNextPosition();
         if ( position != null ) {
-            trace("\tSnake moving into position " + position.toString());
+            debug("\tSnake moving into position " + position.toString());
 
             switch( this.board[position.x][position.y] ) { 
                 case PELLET:
@@ -374,7 +363,7 @@ package ly.jamie.snake {
             this.createSnakeSegment ( position.x, position.y );
         } 
         else {
-            trace("\tGame will be over next step.");
+            debug("\tGame will be over next step.");
             this.isGameOver = true;
         }
 
@@ -393,10 +382,10 @@ package ly.jamie.snake {
     }
 
     public function getNextPosition():Point {
-        trace("GetNextPosition");
+        debug("GetNextPosition");
         var pos: Point = new Point(this.snake[0].x, this.snake[0].y);
 
-        trace("\tPrevious position: " + pos.toString());
+        debug("\tPrevious position: " + pos.toString());
 
         switch(this.direction) {
             case EAST:
@@ -409,7 +398,7 @@ package ly.jamie.snake {
                 pos.x --; break;
         }
 
-        trace("\tDirection: " + this.direction);
+        debug("\tDirection: " + this.direction);
 
         if(this.wrapAround) {
             if ( pos.x < 0 ) pos.x = this.boardWidth - 1;
@@ -419,7 +408,7 @@ package ly.jamie.snake {
         }
         else if ( pos.x < 0 || pos.y < 0  || pos.y >= this.boardHeight || pos.x >= this.boardWidth) return null;
 
-        trace("\tNext position: " + pos.toString());
+        debug("\tNext position: " + pos.toString());
 
         return pos; 
     }
@@ -473,7 +462,7 @@ package ly.jamie.snake {
             lineTo(halfwidth, halfheight);
             endFill();
         }
-        mcBarrier.visible = false;
+        mcBarrier.visible = true;
 
         return mcBarrier;
     }
@@ -483,7 +472,7 @@ package ly.jamie.snake {
         mc.addChild( mcPellet );
 
         for(var obj: Object in mc) {
-            trace("\t" + obj);
+            debug("\t" + obj);
         }
 
         var halfwidth:Number = Math.floor(width / 2);
@@ -504,7 +493,7 @@ package ly.jamie.snake {
         mcPellet.y = 10;
         mcPellet.visible = false;
 
-        trace("\tMC: " + mc + " CreatePellet: " + mcPellet);
+        debug("\tMC: " + mc + " CreatePellet: " + mcPellet);
 
         return mcPellet;
     }
