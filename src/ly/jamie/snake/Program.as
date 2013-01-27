@@ -10,6 +10,7 @@ package ly.jamie.snake {
     private var frameCount:Number; 
     private var enterFrameHandlerInitialized: Boolean = false;
     private var txtDebug:TextField;
+    private var barriesOn:Boolean = true;
 
     public function Program() {
       debug("init program");
@@ -28,9 +29,10 @@ package ly.jamie.snake {
     private function createInstructions(): void {
       var tf: TextField = new TextField();
       tf.defaultTextFormat = new TextFormat("Verdana", 12);
-      tf.htmlText = "<b>Instructions</b>\n<ul>Objectives\n<li>Avoid brown obstacles</li>\n<li>Eat red pellets</li></ul>\n<ul>Controls\n<li>L,R,U,D to move the Snake</li>\n<li>Space to restart</li></ul>";
+      tf.htmlText = "<b>Instructions</b>\n<ul>Objectives\n<li>Avoid brown obstacles</li>\n<li>Eat red pellets</li></ul>\n<ul>Controls\n<li>L,R,U,D to move the Snake</li>\n<li>Space to restart</li>\n<li>CTRL to toggle obstacles</li></ul>";
       tf.x = 230;
       tf.width = 200;
+      tf.height = 200;
       this.addChild(tf);
     }
     private function createGame(): void {
@@ -49,6 +51,7 @@ package ly.jamie.snake {
     private function start():void {
       try { 
         this.createGame();
+        this.game.barrierFrequency = this.barriesOn ? 0.05 : 0;
         this.game.start(); 
       }
       catch(ex:*) { debug("Problem starting: " + ex.message); }
@@ -57,9 +60,9 @@ package ly.jamie.snake {
       if(! this.txtDebug) {
         txtDebug = new TextField();
         txtDebug.x = 230;
-        txtDebug.y = 100;
+        txtDebug.y = 120;
         txtDebug.width = 300;
-        txtDebug.height = 700;
+        txtDebug.height = 100;
         txtDebug.alpha = .5;
         txtDebug.defaultTextFormat = new TextFormat("Verdana", 8);
         this.addChild(txtDebug);
@@ -112,8 +115,14 @@ package ly.jamie.snake {
               this.handleEnterFrame();
               break;
 
+          case Keyboard.CONTROL:
+          case Keyboard.DELETE:
           case Keyboard.HOME:
-              this.game.barrierFrequency = ( this.game.barrierFrequency > 0 ) ? 0 : .05;
+              this.barriesOn = ! this.barriesOn;
+              debug("Toggled barriers to " + 
+                (this.barriesOn ? "off" : "on"));
+              this.start();
+              this.handleEnterFrame();
               break;
         }
       }
