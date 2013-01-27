@@ -18,80 +18,6 @@ package ly.jamie.snake {
     public var BARRIER:Number = 2;
     public var PELLET:Number = 3;
 
-    private function CreateSnakeSegment(mc:MovieClip, width:Number, height:Number):MovieClip {
-        var segment: MovieClip = new MovieClip();
-        mc.addChild(segment);
-
-        var halfwidth:Number = Math.floor(width / 2);
-        var halfheight:Number = Math.floor(height / 2);
-        with ( segment.graphics ) {
-            lineStyle(1, 0x000000, 100);
-            moveTo(halfwidth, halfheight);
-            beginFill(0x00FF00, 100);
-            lineTo(-halfwidth, halfheight);
-            lineTo(-halfwidth, -halfheight);
-            lineTo(halfwidth, -halfheight);
-            lineTo(halfwidth, halfheight);
-            endFill();
-        }
-        segment.visible = false;
-
-        return segment;
-    }
-
-    private function CreateBarrier(mc:MovieClip, width:Number, height:Number):MovieClip {
-        var mcBarrier: MovieClip = new MovieClip();
-        mc.addChild(mcBarrier);
-
-        var halfwidth:Number = Math.floor(width / 2);
-        var halfheight:Number  = Math.floor(height / 2);
-        with ( mcBarrier.graphics ) {
-            lineStyle(1, 0x000000, 100);
-            moveTo(halfwidth, halfheight);
-            beginFill(0x990000, 100);
-            lineTo(-halfwidth, halfheight);
-            lineTo(-halfwidth, -halfheight);
-            lineTo(halfwidth, -halfheight);
-            lineTo(halfwidth, halfheight);
-            endFill();
-        }
-        mcBarrier.visible = false;
-
-        return mcBarrier;
-    }
-
-    private function CreatePellet(mc:MovieClip, width:Number, height:Number): MovieClip {
-        var mcPellet: MovieClip = new MovieClip();
-        mc.addChild( mcPellet );
-
-        for(var obj: Object in mc) {
-            trace("\t" + obj);
-        }
-
-        var halfwidth:Number = Math.floor(width / 2);
-        var halfheight:Number  = Math.floor(height / 2);
-
-        with ( mcPellet.graphics ) {
-            lineStyle(1, 0xFF0000, 100);
-            beginFill(0xFF0000);
-            moveTo(halfwidth, halfheight);
-            lineTo(-halfwidth, halfheight);
-            lineTo(-halfwidth, -halfheight);
-            lineTo(halfwidth, -halfheight);
-            lineTo(halfwidth, halfheight);
-            endFill();
-        }
-
-        mcPellet.x = 10;
-        mcPellet.y = 10;
-        mcPellet.visible = false;
-
-        trace("\tMC: " + mc + " CreatePellet: " + mcPellet);
-
-        return mcPellet;
-    }
-
-
     private var snake:Array;
     private var defaultSegment:MovieClip;
     private var defaultPellet:MovieClip;
@@ -510,6 +436,80 @@ package ly.jamie.snake {
     public function render():void {
    
     }
+
+    private function CreateSnakeSegment(mc:MovieClip, width:Number, height:Number):MovieClip {
+        var segment: MovieClip = new MovieClip();
+        mc.addChild(segment);
+
+        var halfwidth:Number = Math.floor(width / 2);
+        var halfheight:Number = Math.floor(height / 2);
+        with ( segment.graphics ) {
+            lineStyle(1, 0x000000, 100);
+            moveTo(halfwidth, halfheight);
+            beginFill(0x00FF00, 100);
+            lineTo(-halfwidth, halfheight);
+            lineTo(-halfwidth, -halfheight);
+            lineTo(halfwidth, -halfheight);
+            lineTo(halfwidth, halfheight);
+            endFill();
+        }
+        segment.visible = false;
+
+        return segment;
+    }
+
+    private function CreateBarrier(mc:MovieClip, width:Number, height:Number):MovieClip {
+        var mcBarrier: MovieClip = new MovieClip();
+        mc.addChild(mcBarrier);
+
+        var halfwidth:Number = Math.floor(width / 2);
+        var halfheight:Number  = Math.floor(height / 2);
+        with ( mcBarrier.graphics ) {
+            lineStyle(1, 0x000000, 100);
+            moveTo(halfwidth, halfheight);
+            beginFill(0x990000, 100);
+            lineTo(-halfwidth, halfheight);
+            lineTo(-halfwidth, -halfheight);
+            lineTo(halfwidth, -halfheight);
+            lineTo(halfwidth, halfheight);
+            endFill();
+        }
+        mcBarrier.visible = false;
+
+        return mcBarrier;
+    }
+
+    private function CreatePellet(mc:MovieClip, width:Number, height:Number): MovieClip {
+        var mcPellet: MovieClip = new MovieClip();
+        mc.addChild( mcPellet );
+
+        for(var obj: Object in mc) {
+            trace("\t" + obj);
+        }
+
+        var halfwidth:Number = Math.floor(width / 2);
+        var halfheight:Number  = Math.floor(height / 2);
+
+        with ( mcPellet.graphics ) {
+            lineStyle(1, 0xFF0000, 100);
+            beginFill(0xFF0000);
+            moveTo(halfwidth, halfheight);
+            lineTo(-halfwidth, halfheight);
+            lineTo(-halfwidth, -halfheight);
+            lineTo(halfwidth, -halfheight);
+            lineTo(halfwidth, halfheight);
+            endFill();
+        }
+
+        mcPellet.x = 10;
+        mcPellet.y = 10;
+        mcPellet.visible = false;
+
+        trace("\tMC: " + mc + " CreatePellet: " + mcPellet);
+
+        return mcPellet;
+    }
+
 
   }
 }
