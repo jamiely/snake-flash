@@ -13,7 +13,7 @@ package ly.jamie.snake {
 
     public function Program() {
       debug("init program");
-      this.framesPerStep = 1; 
+      this.framesPerStep = 5; 
       this.frameCount = 0;
       trace("Created game: " + this.game)
 

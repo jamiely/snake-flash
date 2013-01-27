@@ -112,6 +112,7 @@ package ly.jamie.snake {
     }
 
     public function addBarriers():void {
+        return;
         this.barrierCount = 0;
         this.barriers = new Array();
         var maxBarriers:Number = this.barrierFrequency * this.boardWidth * this.boardHeight;
@@ -163,14 +164,20 @@ package ly.jamie.snake {
     }
 
     public function removePellet():void {
-        var pell:MovieClip = this.pellets[0];
+        if(pellets.length == 0) return;
 
-        this.board[pell.x][pell.y] = EMPTY;
+        var pell:Point = this.pellets[0];
 
-        var mc: MovieClip = this.mcs[pell.x][pell.y];
-        if(mc) {
-          mc.parent.removeChild(mc);
-          this.mcs[pell.x][pell.y] = null;
+        if(pell) {
+          this.board[pell.x][pell.y] = EMPTY;
+          debug("Attempting to remove pellet x=" + pell.x + " y=" + pell.y);
+          var mc: MovieClip = this.mcs[pell.x][pell.y];
+          if(mc) {
+            mc.parent.removeChild(mc);
+            this.mcs[pell.x][pell.y] = null;
+          }
+        } else {
+          throw new Error("Pellet doesn't exist");
         }
 
         this.pellets.shift();
@@ -251,10 +258,7 @@ package ly.jamie.snake {
     }
 
     public function popSnakeSegment ():void { 
-        debug("Popping Snake Segment");
-
         if ( this.snake.length < 1 ) {
-            debug("\tSnake has no length");
             return;
         }
 
@@ -263,7 +267,6 @@ package ly.jamie.snake {
           this.board[end.x][end.y] = EMPTY;
         }
 
-        debug("\tRemoving clip: " + this.mcs[end.x][end.y]);
         var mc:MovieClip = this.mcs[end.x][end.y];
         if(mc) { 
           mc.parent.removeChild(mc);
@@ -289,13 +292,12 @@ package ly.jamie.snake {
             return;
         }
 
-        if ( !this.shouldGrow ) {
-            // move from back to front
-            debug("\tDo Not grow");
-            this.popSnakeSegment();
+        if ( this.shouldGrow ) {
+            this.shouldGrow = false
         }
         else {
-            this.shouldGrow = false
+            // move from back to front
+            this.popSnakeSegment();
         }
 
 
@@ -332,7 +334,6 @@ package ly.jamie.snake {
 
         if ( this.pelletClock >= this.pelletLifespan ) {
           this.removePellet();
-          throw new Error("Blah");
         }
 
         this.clock ++;
@@ -340,7 +341,6 @@ package ly.jamie.snake {
     }
 
     public function getNextPosition():Point {
-        debug("GetNextPosition");
         var pos: Point = new Point(this.snake[0].x, this.snake[0].y);
 
         debug("\tPrevious position: " + pos.toString());
