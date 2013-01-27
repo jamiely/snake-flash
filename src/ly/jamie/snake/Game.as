@@ -244,13 +244,13 @@ package ly.jamie.snake {
 
         //this.depth = 100;
         this.addBarriers();
-        throw new Error("Added barriers");
  
         while ( this.snake.length > 1 ) {
           this.popSnakeSegment(); 
         }
         this.createSnakeSegment(this.startPosition.x, this.startPosition.y);
 
+        // draw grid outline
         var w:Number = this.boardWidth * this.snakeSegment.width;
         var h:Number = this.boardHeight * this.snakeSegment.height;
         with(this.parentMC.graphics) {
@@ -261,9 +261,6 @@ package ly.jamie.snake {
             lineTo(w, 0);
             lineTo(w, h);
         }
-
-        debug("\tSnake segment created.");
-
         this.isGameOver = false;
     }
 
@@ -290,39 +287,13 @@ package ly.jamie.snake {
     }
 
     public function createSnakeSegment(x:Number, y:Number):void {
-        debug("Create Snake Segment");
-
         var pt:Point = new Point(x, y);
-
-        debug("\tNew segment at point: " + pt.toString());
-
         this.snake.unshift(pt);
-
-
-        debug("\tCreating snake segment at " + pt.toString());
-        //segmentName = "segment" + this.depth;
-        var segmentName:String = "segment";
-        //this.snakeSegment.duplicateMovieClip(segmentName, this.depth);
-        this.snakeSegment.duplicateMovieClip(segmentName, 0);
-        //debug("\tdepth: " + this.depth);
-
-        var mc:MovieClip = this.parentMC[segmentName];
-
-        debug("\tDuplicated clip: " + this.snakeSegment + " to " + mc);
-
+        var mc:MovieClip = CreateSnakeSegment(this.parentMC, 10, 10);
         mc.x = x * mc.height; 
         mc.y = y * mc.width;
-
-        debug("\tMovieclip moved to: (" + mc.x + ", " + mc.y + ")");
-
         this.mcs[x][y] = mc;
-
         this.board[pt.x][pt.y] = SNAKE;
-
-
-        debug("\tMovieclip " + mc + " stored at: " + this.mcs[x][y]);
-
-        //this.depth ++;
     }
 
     public function step():void {
