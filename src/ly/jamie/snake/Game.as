@@ -18,11 +18,13 @@ package ly.jamie.snake {
     public var BARRIER:Number = 2;
     public var PELLET:Number = 3;
 
-    function CreateSnakeSegment(mc, width, height):MovieClip {
-        mc.createEmptyMovieClip("segment", 2);
+    private function CreateSnakeSegment(mc:MovieClip, width:Number, height:Number):MovieClip {
+        var segment: MovieClip = new MovieClip();
+        mc.addChild(segment);
+
         var halfwidth:Number = Math.floor(width / 2);
         var halfheight:Number = Math.floor(height / 2);
-        with ( mc.segment.graphics ) {
+        with ( segment.graphics ) {
             lineStyle(1, 0x000000, 100);
             moveTo(halfwidth, halfheight);
             beginFill(0x00FF00, 100);
@@ -32,19 +34,19 @@ package ly.jamie.snake {
             lineTo(halfwidth, halfheight);
             endFill();
         }
-        mc.segment._visible = false;
+        segment.visible = false;
 
-        return mc.segment;
+        return segment;
     }
 
-    function CreateBarrier(mc, width, height) {
-        mc.createEmptyMovieClip("mcBarrier", 4);
+    private function CreateBarrier(mc:MovieClip, width:Number, height:Number):MovieClip {
+        var mcBarrier: MovieClip = new MovieClip();
+        mc.addChild(mcBarrier);
+
         var halfwidth:Number = Math.floor(width / 2);
         var halfheight:Number  = Math.floor(height / 2);
-        with ( mc.mcBarrier.graphics ) {
+        with ( mcBarrier.graphics ) {
             lineStyle(1, 0x000000, 100);
-
-
             moveTo(halfwidth, halfheight);
             beginFill(0x990000, 100);
             lineTo(-halfwidth, halfheight);
@@ -53,13 +55,14 @@ package ly.jamie.snake {
             lineTo(halfwidth, halfheight);
             endFill();
         }
-        mc.mcBarrier._visible = false;
+        mcBarrier.visible = false;
 
-        return mc.mcBarrier;
+        return mcBarrier;
     }
 
-    function CreatePellet(mc, width, height) {
-        mc.createEmptyMovieClip("mcPellet", 0);
+    private function CreatePellet(mc:MovieClip, width:Number, height:Number): MovieClip {
+        var mcPellet: MovieClip = new MovieClip();
+        mc.addChild( mcPellet );
 
         for(var obj: Object in mc) {
             trace("\t" + obj);
@@ -68,7 +71,7 @@ package ly.jamie.snake {
         var halfwidth:Number = Math.floor(width / 2);
         var halfheight:Number  = Math.floor(height / 2);
 
-        with ( mc.mcPellet ) {
+        with ( mcPellet.graphics ) {
             lineStyle(1, 0xFF0000, 100);
             beginFill(0xFF0000);
             moveTo(halfwidth, halfheight);
@@ -79,13 +82,13 @@ package ly.jamie.snake {
             endFill();
         }
 
-        mc.mcPellet.x = 10;
-        mc.mcPellet.y = 10;
-        mc.mcPellet._visible = false;
+        mcPellet.x = 10;
+        mcPellet.y = 10;
+        mcPellet.visible = false;
 
-        trace("\tMC: " + mc + " CreatePellet: " + mc.mcPellet);
+        trace("\tMC: " + mc + " CreatePellet: " + mcPellet);
 
-        return mc.mcPellet;
+        return mcPellet;
     }
 
 
