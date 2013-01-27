@@ -1,6 +1,3 @@
-# A sample Guardfile
-# More info at https://github.com/guard/guard#readme
-
 guard 'shell' do
   watch(%r{src/ly/jamie/snake}) do 
     result = `make 2>&1`
@@ -8,6 +5,7 @@ guard 'shell' do
     if errors.nil? || errors.captures.nil?
       n "Build successful"
     else
+      # if there are errors then display the first one
       n errors.captures, 'make'
     end
     result
