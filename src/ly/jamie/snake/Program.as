@@ -46,8 +46,9 @@ package ly.jamie.snake {
         txtDebug.x = 200;
         txtDebug.y = 100;
         txtDebug.width = 300;
+        txtDebug.height = 700;
         txtDebug.alpha = .5;
-        txtDebug.defaultTextFormat = new TextFormat("Verdana", 14);
+        txtDebug.defaultTextFormat = new TextFormat("Verdana", 12);
         this.addChild(txtDebug);
       }
       txtDebug.text = msg + "\n" + txtDebug.text;
@@ -55,7 +56,7 @@ package ly.jamie.snake {
     private function playGame():void {
       try {
         this.frameCount ++;
-        if(this.frameCount % this.framesPerStep == 0) {
+        if(this.frameCount % this.framesPerStep == 0 && ! this.game.isGameOver) {
           this.game.step();
         }
       }

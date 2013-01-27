@@ -45,7 +45,7 @@ package ly.jamie.snake {
     private var board:Array;
     private var mcs:Array;
     private var snakeSegment: MovieClip;
-    private var isGameOver: Boolean;
+    public var isGameOver: Boolean;
     private var direction: Number;
     private var shouldGrow: Boolean;
 
@@ -163,52 +163,36 @@ package ly.jamie.snake {
     }
 
     public function removePellet():void {
-        debug("Remove Pellet");
         var pell:MovieClip = this.pellets[0];
-
-        debug("\tlocation: " + pell.toString());
 
         this.board[pell.x][pell.y] = EMPTY;
 
-        debug("\tmc: " + this.mcs[pell.x][pell.y]);
-
-        this.mcs[pell.x][pell.y].removeMovieClip();
-        this.mcs[pell.x][pell.y] = null;
+        var mc: MovieClip = this.mcs[pell.x][pell.y];
+        if(mc) {
+          mc.parent.removeChild(mc);
+          this.mcs[pell.x][pell.y] = null;
+        }
 
         this.pellets.shift();
     }
 
     public function addPellet():void {
-        debug("AddPellete");
         do {
             x = Math.floor(Math.random() * this.boardWidth);
             y = Math.floor(Math.random() * this.boardHeight);
-
-            debug("\tattempting at location: " + x + ", " + y + " board = " + this.board[x][y]);
         } while ( this.board[x][y] != EMPTY );
 
         var pt:Point = new Point(x, y);
 
-        debug("\tlocation: " + pt.toString());
-
         this.board[x][y] = PELLET;
 
-        var pelletName:String = "pellet"; // depth
-
-
-        this.pellet.duplicateMovieClip(pelletName, 1); // depth
-        debug("\tname: " + pelletName + " mc: " + this.pellet);
-
-        this.mcs[x][y] = this.parentMC[pelletName];
+        var mc:MovieClip = CreatePellet(this.parentMC, 
+          this.defaultPellet.width, this.defaultPellet.height);
+        this.mcs[x][y] = mc;
 
         this.mcs[x][y].x = x * this.snakeSegment.width;
         this.mcs[x][y].y = y * this.snakeSegment.height;
-
-        debug("\tmc: " + this.mcs[x][y]);
-
         this.pellets.push(pt);
-
-        // depth
     }
 
     public function start():void {
@@ -301,11 +285,7 @@ package ly.jamie.snake {
     }
 
     public function step():void {
-        debug("Step");
-
         if ( this.isGameOver ) {
-            //this.step = undefined;
-            debug("\tGame Over.");
             return;
         }
 
@@ -351,10 +331,12 @@ package ly.jamie.snake {
         }
 
         if ( this.pelletClock >= this.pelletLifespan ) {
-            this.removePellet();
+          this.removePellet();
+          throw new Error("Blah");
         }
 
         this.clock ++;
+        debug("Clock = " + this.clock);
     }
 
     public function getNextPosition():Point {
