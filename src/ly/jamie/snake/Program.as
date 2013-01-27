@@ -13,15 +13,10 @@ package ly.jamie.snake {
 
     public function Program() {
       debug("init program");
-      this.framesPerStep = 5; 
+      this.framesPerStep = 3; 
       this.frameCount = 0;
-      trace("Created game: " + this.game)
 
       var self: Object = this;
-      this.game = new Game(this, 20, 20);
-      this.game.debug = function(msg:String):void {
-        self.debug.call(self, msg);
-      };
       this.stage.addEventListener(KeyboardEvent.KEY_UP, 
         function(e:KeyboardEvent):void {
           self.ArrowListener.call(self, e);
@@ -31,13 +26,27 @@ package ly.jamie.snake {
         drawRect(0, 0, 800, 1000);
         endFill();
       }
-      debug("End init program")
       this.start();
       this.handleEnterFrame();
-      debug("Started game");
+    }
+    private function createGame(): void {
+      var self: Object = this;
+      if(this.game) {
+        //cleanup
+        this.removeChild(this.game);
+        this.game = null;
+      }
+      this.game = new Game(20, 20);
+      this.game.debug = function(msg:String):void {
+        self.debug.call(self, msg);
+      };
+      this.addChild(this.game);
     }
     private function start():void {
-      try { this.game.start(); }
+      try { 
+        this.createGame();
+        this.game.start(); 
+      }
       catch(ex:*) { debug("Problem starting: " + ex.message); }
     }
     private function debug(msg:String): void {
@@ -76,7 +85,6 @@ package ly.jamie.snake {
     }
 
     private function ArrowListener(e:KeyboardEvent):void {
-      debug("Key event: " + e.keyCode);
       switch(e.keyCode) {
           case Keyboard.UP:
               if(this.game.getDirection() == 2) break;

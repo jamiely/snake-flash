@@ -51,8 +51,8 @@ package ly.jamie.snake {
 
     public var debug: Function = function():void{};
 
-    function Game(parentMC:MovieClip, boardWidth:Number, boardHeight:Number) {
-        debug("Initializing Game");
+    function Game(boardWidth:Number, boardHeight:Number) {
+        var parentMC:MovieClip = this;
 
         this.snake = new Array();
         this.defaultSegment = CreateSnakeSegment(parentMC, 10, 10);
@@ -88,8 +88,6 @@ package ly.jamie.snake {
         this.board = new Array(boardWidth);
         this.mcs = new Array(boardWidth);
 
-        //debug("A: " +this.board + this.mcs);
-
         for(var i:Number = 0; i < boardWidth; i ++) {
             this.board[i] = new Array(boardHeight);
             this.mcs[i] = new Array(boardHeight);
@@ -103,16 +101,16 @@ package ly.jamie.snake {
     }
 
     public function clearPosition(x:Number, y:Number):void {
-        debug("Clearing board position " + x +  ", " + y + " val = " + this.board[x][y]);
         this.board[x][y] = EMPTY;
         if ( this.mcs[x][y] != null ) {
-            this.mcs[x][y].removeMovieClip();
+            var mc:MovieClip = this.mcs[x][y];
+            try { mc.parent.removeChild(mc); }
+            catch(ex:*) { debug("Problem clearing position: " + ex.message); }
             this.mcs[x][y] = null;
         }
     }
 
     public function addBarriers():void {
-        return;
         this.barrierCount = 0;
         this.barriers = new Array();
         var maxBarriers:Number = this.barrierFrequency * this.boardWidth * this.boardHeight;
@@ -213,12 +211,6 @@ package ly.jamie.snake {
                 this.clearPosition(i, j);
             }
         }
-
-
-
-        // debug("\tBoard:");
-        // this.printBoard();
-
         debug("\tBuilt board");
         this.length = 1;
         this.pellets = new Array();
@@ -303,8 +295,6 @@ package ly.jamie.snake {
 
         var position: Point = this.getNextPosition();
         if ( position != null ) {
-            debug("\tSnake moving into position " + position.toString());
-
             switch( this.board[position.x][position.y] ) { 
                 case PELLET:
                     // pellet
@@ -337,13 +327,10 @@ package ly.jamie.snake {
         }
 
         this.clock ++;
-        debug("Clock = " + this.clock);
     }
 
     public function getNextPosition():Point {
         var pos: Point = new Point(this.snake[0].x, this.snake[0].y);
-
-        debug("\tPrevious position: " + pos.toString());
 
         switch(this.direction) {
             case EAST:
@@ -356,8 +343,6 @@ package ly.jamie.snake {
                 pos.x --; break;
         }
 
-        debug("\tDirection: " + this.direction);
-
         if(this.wrapAround) {
             if ( pos.x < 0 ) pos.x = this.boardWidth - 1;
             else if (pos.x >=this.boardWidth) pos.x = 0;
@@ -365,8 +350,6 @@ package ly.jamie.snake {
             else if ( pos.y >= this.boardHeight ) pos.y = 0;
         }
         else if ( pos.x < 0 || pos.y < 0  || pos.y >= this.boardHeight || pos.x >= this.boardWidth) return null;
-
-        debug("\tNext position: " + pos.toString());
 
         return pos; 
     }
@@ -429,10 +412,6 @@ package ly.jamie.snake {
         var mcPellet: MovieClip = new MovieClip();
         mc.addChild( mcPellet );
 
-        for(var obj: Object in mc) {
-            debug("\t" + obj);
-        }
-
         var halfwidth:Number = Math.floor(width / 2);
         var halfheight:Number  = Math.floor(height / 2);
 
@@ -450,8 +429,6 @@ package ly.jamie.snake {
         mcPellet.x = 10;
         mcPellet.y = 10;
         mcPellet.visible = true;
-
-        debug("\tMC: " + mc + " CreatePellet: " + mcPellet);
 
         return mcPellet;
     }
