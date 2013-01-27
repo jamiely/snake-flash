@@ -39,7 +39,7 @@ package ly.jamie.snake {
     private var pelletClock:Number;
     private var barrier:MovieClip;
     private var barriers:Array;
-    private var barrierFrequency:Number;
+    public var barrierFrequency:Number;
     private var barrierCount:Number;
     private var segment:MovieClip;
     private var board:Array;
@@ -509,6 +509,12 @@ package ly.jamie.snake {
         return mcPellet;
     }
 
+    public function getDirection(): Number {
+      return this.direction;
+    }
+    public function setDirection(dir:Number): void {
+      this.direction = dir;
+    }
 
   }
 }
