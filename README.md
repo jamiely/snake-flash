@@ -25,7 +25,8 @@ Media
 =====
 
 * http://youtu.be/oDqGkW_MYtY
-* media/snake-flash-fc38c32.png
+* <img
+src="https://raw.github.com/jamiely/snake-flash/master/media/snake-flash-fc38c32.png"> 
 
 
 
