@@ -21,13 +21,17 @@ package ly.jamie.snake {
         function(e:KeyboardEvent):void {
           self.ArrowListener.call(self, e);
         });
-      with(this.graphics) {
-        beginFill(0x3333FF);
-        drawRect(0, 0, 800, 1000);
-        endFill();
-      }
       this.start();
       this.handleEnterFrame();
+      this.createInstructions();
+    }
+    private function createInstructions(): void {
+      var tf: TextField = new TextField();
+      tf.defaultTextFormat = new TextFormat("Verdana", 12);
+      tf.htmlText = "<b>Instructions</b>\n<ul>Objectives\n<li>Avoid brown obstacles</li>\n<li>Eat red pellets</li></ul>\n<ul>Controls\n<li>L,R,U,D to move the Snake</li>\n<li>Space to restart</li></ul>";
+      tf.x = 230;
+      tf.width = 200;
+      this.addChild(tf);
     }
     private function createGame(): void {
       var self: Object = this;
@@ -52,12 +56,12 @@ package ly.jamie.snake {
     private function debug(msg:String): void {
       if(! this.txtDebug) {
         txtDebug = new TextField();
-        txtDebug.x = 200;
+        txtDebug.x = 230;
         txtDebug.y = 100;
         txtDebug.width = 300;
         txtDebug.height = 700;
         txtDebug.alpha = .5;
-        txtDebug.defaultTextFormat = new TextFormat("Verdana", 12);
+        txtDebug.defaultTextFormat = new TextFormat("Verdana", 8);
         this.addChild(txtDebug);
       }
       txtDebug.text = msg + "\n" + txtDebug.text;

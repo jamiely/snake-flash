@@ -165,23 +165,18 @@ package ly.jamie.snake {
         if(pellets.length == 0) return;
 
         var pell:Point = this.pellets[0];
-
-        if(pell) {
-          this.board[pell.x][pell.y] = EMPTY;
-          debug("Attempting to remove pellet x=" + pell.x + " y=" + pell.y);
-          var mc: MovieClip = this.mcs[pell.x][pell.y];
-          if(mc) {
-            mc.parent.removeChild(mc);
-            this.mcs[pell.x][pell.y] = null;
-          }
-        } else {
-          throw new Error("Pellet doesn't exist");
+        this.board[pell.x][pell.y] = EMPTY;
+        var mc: MovieClip = this.mcs[pell.x][pell.y];
+        if(mc) {
+          mc.parent.removeChild(mc);
+          this.mcs[pell.x][pell.y] = null;
         }
 
         this.pellets.shift();
     }
 
     public function addPellet():void {
+        var x:Number, y:Number;
         do {
             x = Math.floor(Math.random() * this.boardWidth);
             y = Math.floor(Math.random() * this.boardHeight);
@@ -418,11 +413,7 @@ package ly.jamie.snake {
         with ( mcPellet.graphics ) {
             lineStyle(1, 0xFF0000, 100);
             beginFill(0xFF0000);
-            moveTo(halfwidth, halfheight);
-            lineTo(-halfwidth, halfheight);
-            lineTo(-halfwidth, -halfheight);
-            lineTo(halfwidth, -halfheight);
-            lineTo(halfwidth, halfheight);
+            drawCircle(0, 0, Math.min(halfwidth, halfheight));
             endFill();
         }
 
