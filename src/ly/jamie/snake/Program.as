@@ -33,6 +33,7 @@ package ly.jamie.snake {
       }
       debug("End init program")
       this.start();
+      this.handleEnterFrame();
       debug("Started game");
     }
     private function start():void {
@@ -52,11 +53,29 @@ package ly.jamie.snake {
       txtDebug.text = msg + "\n" + txtDebug.text;
     }
     private function playGame():void {
-      this.frameCount ++;
-      if(this.frameCount % this.framesPerStep == 0) this.game.step();
+      try {
+        this.frameCount ++;
+        if(this.frameCount % this.framesPerStep == 0) {
+          this.game.step();
+        }
+      }
+      catch(ex:*) {
+        debug("Problem stepping game: " + ex.message);
+      }
+    }
+
+    private function handleEnterFrame():void {
+        if(!enterFrameHandlerInitialized) {
+          var self:Object = this;
+          this.addEventListener(Event.ENTER_FRAME, function():void{
+            self.playGame();
+          });
+          enterFrameHandlerInitialized = true;
+        }
     }
 
     private function ArrowListener(e:KeyboardEvent):void {
+      debug("Key event: " + e.keyCode);
       switch(e.keyCode) {
           case Keyboard.UP:
               if(this.game.getDirection() == 2) break;
@@ -77,10 +96,7 @@ package ly.jamie.snake {
           case Keyboard.SPACE:
 
               this.start();
-              if(!enterFrameHandlerInitialized) {
-                this.addEventListener(Event.ENTER_FRAME, playGame);
-                enterFrameHandlerInitialized = true;
-              }
+              this.handleEnterFrame();
               break;
 
           case Keyboard.HOME:

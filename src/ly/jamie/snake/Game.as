@@ -56,9 +56,11 @@ package ly.jamie.snake {
 
         this.snake = new Array();
         this.defaultSegment = CreateSnakeSegment(parentMC, 10, 10);
+        this.defaultSegment.visible = false;
         this.defaultPellet = CreatePellet(parentMC, 5, 5);
+        this.defaultPellet.visible = false;
         this.defaultBarrier = CreateBarrier(parentMC, 10, 10);
-        debug("\tDefault snake segment: " + this.defaultSegment + " Default pellet: " + this.defaultPellet);
+        this.defaultBarrier.visible = false;
         this.parentMC = parentMC;
 
         this.wrapAround = true;
@@ -272,18 +274,20 @@ package ly.jamie.snake {
             return;
         }
 
-        var end:MovieClip = this.snake[this.snake.length-1];
-        debug("\tLast segment positon: " + end.toString());
-        if ( this.board[end.x][end.y] == SNAKE ) this.board[end.x][end.y] = EMPTY;
+        var end:Point = this.snake[this.snake.length-1];
+        if ( this.board[end.x][end.y] == SNAKE ) {
+          this.board[end.x][end.y] = EMPTY;
+        }
 
         debug("\tRemoving clip: " + this.mcs[end.x][end.y]);
-        this.mcs[end.x][end.y].removeMovieClip();
-        this.mcs[end.x][end.y] = null;
+        var mc:MovieClip = this.mcs[end.x][end.y];
+        if(mc) { 
+          mc.parent.removeChild(mc);
+          this.mcs[end.x][end.y] = null;
+        }
 
         var len:Number = this.snake.length;
         this.snake.pop();
-
-        debug("\tSnake length before: " + len  + " afteR: " + this.snake.length);
     }
 
     public function createSnakeSegment(x:Number, y:Number):void {
@@ -313,6 +317,7 @@ package ly.jamie.snake {
         else {
             this.shouldGrow = false
         }
+
 
         var position: Point = this.getNextPosition();
         if ( position != null ) {
@@ -412,7 +417,7 @@ package ly.jamie.snake {
             lineTo(halfwidth, halfheight);
             endFill();
         }
-        segment.visible = false;
+        segment.visible = true;
 
         return segment;
     }
@@ -462,7 +467,7 @@ package ly.jamie.snake {
 
         mcPellet.x = 10;
         mcPellet.y = 10;
-        mcPellet.visible = false;
+        mcPellet.visible = true;
 
         debug("\tMC: " + mc + " CreatePellet: " + mcPellet);
 
