@@ -29,7 +29,7 @@ package ly.jamie.snake {
     private function createInstructions(): void {
       var tf: TextField = new TextField();
       tf.defaultTextFormat = new TextFormat("Verdana", 12);
-      tf.htmlText = "<b>Instructions</b>\n<ul>Objectives\n<li>Avoid brown obstacles</li>\n<li>Eat red pellets</li></ul>\n<ul>Controls\n<li>L,R,U,D to move the Snake</li>\n<li>Space to restart</li>\n<li>CTRL to toggle obstacles</li></ul>";
+      tf.htmlText = "<b>Instructions</b>\n<ul>Objectives\n<li>Avoid brown obstacles</li>\n<li>Eat red pellets</li></ul>\n<ul>Controls\n<li>L,R,U,D to move Snake</li>\n<li>Space to restart</li>\n<li>CTRL to toggle obstacles</li></ul>";
       tf.x = 230;
       tf.width = 200;
       tf.height = 200;
