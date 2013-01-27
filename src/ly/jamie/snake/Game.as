@@ -50,7 +50,7 @@ package ly.jamie.snake {
     private var shouldGrow: Boolean;
 
 
-    function Game(parentMC, boardWidth, boardHeight) {
+    function Game(parentMC:MovieClip, boardWidth:Number, boardHeight:Number) {
         trace("Initializing Game");
 
         this.snake = new Array();
@@ -87,20 +87,19 @@ package ly.jamie.snake {
 
         //trace("A: " +this.board + this.mcs);
 
-        for(var i = 0; i < boardWidth; i ++) {
+        for(var i:Number = 0; i < boardWidth; i ++) {
             this.board[i] = new Array(boardHeight);
             this.mcs[i] = new Array(boardHeight);
-            for(var j=0; j < boardHeight; j ++) {
+            for(var j:Number=0; j < boardHeight; j ++) {
                 this.board[i][j] = EMPTY;
                 this.mcs[i][j] = null;
             }
-            //trace("B" + i + ": " + this.board[i] + this.mcs[i]);
         }
 
         trace("\tBoard Initialized");
     }
 
-    public function clearPosition(x, y):void {
+    public function clearPosition(x:Number, y:Number):void {
         trace("Clearing board position " + x +  ", " + y + " val = " + this.board[x][y]);
         this.board[x][y] = EMPTY;
         if ( this.mcs[x][y] != null ) {
@@ -148,7 +147,7 @@ package ly.jamie.snake {
         trace("\tAdded " + barrierCount + " of " + maxBarriers + " barriers.");
         trace("\tDuplicating barrier: " + this.barrier);
 
-        for(var i=0; i < this.barriers.length; i ++ ) {
+        for(var i:Number=0; i < this.barriers.length; i ++ ) {
             pt = this.barriers[i];
             var barrierName:String = "barrier" + i; // depth
             this.barrier.duplicateMovieClip(barrierName, i)
@@ -228,8 +227,8 @@ package ly.jamie.snake {
 
 
         trace("\tInitialize board to "  + EMPTY);
-        for(var i = 0; i < this.boardWidth; i ++) {
-            for(var j = 0; j < this.boardHeight; j ++) {
+        for(var i:Number = 0; i < this.boardWidth; i ++) {
+            for(var j:Number = 0; j < this.boardHeight; j ++) {
                 this.clearPosition(i, j);
             }
         }
@@ -301,7 +300,7 @@ package ly.jamie.snake {
         trace("\tSnake length before: " + len  + " afteR: " + this.snake.length);
     }
 
-    public function createSnakeSegment(x, y):void {
+    public function createSnakeSegment(x:Number, y:Number):void {
         trace("Create Snake Segment");
 
         var pt:Point = new Point(x, y);
