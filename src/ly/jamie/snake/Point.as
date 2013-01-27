@@ -1,7 +1,9 @@
 package ly.jamie.snake {
+  public class Point {
+    public var x:Number;
+    public var y:Number;
 
-  class Point {
-    function Point(x, y) {
+    function Point(x:Number, y:Number) {
       this.x = x;
       this.y = y;
     }
