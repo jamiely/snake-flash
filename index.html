@@ -4,13 +4,18 @@
 <TITLE>snake</TITLE>
 </HEAD>
 <BODY bgcolor="#FFFFFF">
-<!-- URL's used in the movie-->
-<!-- text used in the movie-->
-<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
- codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0"
- WIDTH="800" HEIGHT="800" id="snake" ALIGN="">
- <PARAM NAME=movie VALUE="bin/snake.swf"> <PARAM NAME=quality VALUE=high> <PARAM NAME=bgcolor VALUE=#FFFFFF> <EMBED src="bin/snake.swf" quality=high bgcolor=#FFFFFF  WIDTH="800" HEIGHT="800" NAME="snake" ALIGN=""
- TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED>
-</OBJECT>
+<script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+<script>
+    window.RufflePlayer = window.RufflePlayer || {};
+    window.addEventListener("load", () => {
+        const ruffle = window.RufflePlayer.newest();
+        const player = ruffle.createPlayer();
+        document.getElementById("flash-container").appendChild(player);
+        player.load("bin/snake.swf");
+    });
+</script>
+
+<div id="flash-container"></div>
+
 </BODY>
 </HTML>
