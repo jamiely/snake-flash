@@ -19,7 +19,7 @@ run make.
 Demo
 ====
 
-http://jamie.ly/labs/snake/
+https://jamiely.github.io/snake-flash/
 
 Media
 =====
